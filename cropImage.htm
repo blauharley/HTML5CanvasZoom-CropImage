@@ -5,14 +5,26 @@
 
 <head>
   <title></title>
+  <style>
+      body {
+        margin: 0px;
+        padding: 0px;
+      }
+  </style>
 </head>
 
 <body>
-<div style="position: relative">
-  <canvas id="canvas" style="border:1px solid black;position: relative;top=0;left:0;"></canvas>
-  <canvas width="50" height="50" id="img" style="position: absolute;border:1px solid black;float:right;display: none;pointer-events:none;"></canvas>
-</div>
+
+<h2>Change size of cropped Image:</h2>
 <input type="range" width="100" value="100" height="20" id="slider" min="0" max="200" />
+
+<h2>Test Area:</h2>
+<div style="position: relative;width:50%;margin:0 auto">
+  <canvas id="canvas" style="border:1px solid black;"></canvas>
+  <canvas id="img" style="position: absolute;border:1px solid black;float:right;display: none;pointer-events:none;"></canvas>
+</div>
+
+
 </body>
 <script>
 
@@ -25,11 +37,11 @@
     var slider = document.getElementById('slider');
     var sliderFactor = Number(slider.value);
 
-    var cropWidth = 50;
-    var cropHeight = 50;
+    var cropWidth = 100;
+    var cropHeight = 100;
 
-    var imgWidth = 530;
-    var imgHeight = 300;
+    var imgWidth = 0;
+    var imgHeight = 0;
 
     var currentPosX = 0;
     var currentPosY = 0;
@@ -41,6 +53,9 @@
 
     var img = new Image();
     img.onload = function(){
+
+        cimg.setAttribute('width',cropWidth);
+        cimg.setAttribute('height',cropHeight);
 
         imgWidth = img.width;
         imgHeight = img.height;
@@ -58,15 +73,34 @@
         });
 
         c.addEventListener('mouseup',function(){
-            isPressing = false;
-            c.setAttribute('style','border:1px solid black;position: relative;top=0;left:0;cursor:default');
-            cimg.setAttribute('style','display: none;');
+            hideCropImageCanvas();
         });
+
+        /* ie 9&10 quirks */
+        if(navigator.appVersion.indexOf("MSIE 9.")!=-1||navigator.appVersion.indexOf("MSIE 10.")!=-1){
+            cimg.addEventListener('mouseup',function(){
+                hideCropImageCanvas();
+            });
+            cimg.addEventListener('mouseout',function(){
+                hideCropImageCanvas();
+            });
+        }
+        else{
+            c.addEventListener('mouseout',function(){
+                hideCropImageCanvas();
+            });
+        }
 
         c.addEventListener('mousemove',function(e){
 
-            currentPosX = e.clientX;
-            currentPosY = e.clientY;
+            var mousePos = getMousePos(c, e);
+
+            currentPosX = mousePos.x;
+            currentPosY = mousePos.y;
+
+            if(testCroppingRect){
+                console.log(mousePos);
+            }
 
             handleDrawingMag();
 
@@ -74,7 +108,6 @@
 
         slider.addEventListener('mousemove',function(){
             sliderFactor = Number(slider.value);
-            console.log(sliderFactor);
             cimg.setAttribute('style','border:1px solid black;float:right;'+
                                 'width:'+
                                 (cropWidth+sliderFactor)+'px;'+
@@ -88,12 +121,14 @@
             if(isPressing){
 
               c.width = c.width;
-              c.setAttribute('style','border:1px solid black;position: relative;top=0;left:0;cursor:none');
+              c.setAttribute('style','border:1px solid black;cursor:none');
 
               ctx.drawImage(img,0,0,imgWidth,imgHeight);
 
               var rectX = currentPosX-(cropWidth/2)-cursorWidth;
+              rectX = rectX<0?0:rectX;
               var rectY = currentPosY-(cropHeight/2)-cursorHeight;
+              rectY = rectY<0?0:rectY;
 
               if(testCroppingRect){
                 ctx.beginPath();
@@ -115,10 +150,23 @@
 
             }
             else{
-              c.setAttribute('style','border:1px solid black;position: relative;top=0;left:0;cursor:default');
-              cimg.setAttribute('style','display: none;');
+              hideCropImageCanvas();
             }
 
+        }
+
+        function getMousePos(canvas, evt) {
+          var rect = canvas.getBoundingClientRect();
+          return {
+            x: evt.clientX - rect.left,
+            y: evt.clientY - rect.top
+          };
+        }
+
+        function hideCropImageCanvas(){
+            isPressing = false;
+            c.setAttribute('style','border:1px solid black;cursor:default');
+            cimg.setAttribute('style','display: none;');
         }
 
     };
