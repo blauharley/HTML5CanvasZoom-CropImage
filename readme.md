@@ -1,0 +1,1 @@
+JavaScript Class that is used to zoom into or out of an image
