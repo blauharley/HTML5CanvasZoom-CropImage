@@ -37,8 +37,9 @@
     var slider = document.getElementById('slider');
     var sliderFactor = Number(slider.value);
 
-    var cropWidth = 100;
-    var cropHeight = 100;
+    // change these variables to cut out bigger or smaler pictures
+    var cropWidth = 120;
+    var cropHeight = 60;
 
     var imgWidth = 0;
     var imgHeight = 0;
@@ -126,9 +127,14 @@
               ctx.drawImage(img,0,0,imgWidth,imgHeight);
 
               var rectX = currentPosX-(cropWidth/2)-cursorWidth;
+              // take x-borders into consideration
               rectX = rectX<0?0:rectX;
+              rectX = rectX+cropWidth>imgWidth?imgWidth-cropWidth:rectX;
+
               var rectY = currentPosY-(cropHeight/2)-cursorHeight;
+              // take y-borders into consideration
               rectY = rectY<0?0:rectY;
+              rectY = rectY+cropHeight>imgHeight?imgHeight-cropHeight:rectY;
 
               if(testCroppingRect){
                 ctx.beginPath();
@@ -141,9 +147,10 @@
               }
               else{
                 ctxImg.drawImage(img,rectX,rectY,cropWidth,cropHeight,0,0,cropWidth,cropHeight);
+                var ratio = cropWidth/cropHeight;
                 cimg.setAttribute('style','position: absolute;pointer-events:none;border:1px solid black;float:right;cursor:none;display: block;'+
-                                               'top:'+(rectY-(sliderFactor/2))+'px;'+'left:'+(rectX-(sliderFactor/2))+'px;'+
-                                               'width:'+(cropWidth+sliderFactor)+'px;'+
+                                               'top:'+(rectY-(sliderFactor/2))+'px;'+'left:'+(rectX-((sliderFactor*ratio)/2))+'px;'+
+                                               'width:'+((cropWidth+(sliderFactor*ratio)))+'px;'+
                                                'height:'+(cropHeight+sliderFactor)+'px;'
                 );
               }
