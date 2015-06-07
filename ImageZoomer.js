@@ -1,6 +1,7 @@
 function ImageZoomer(opts){
 
     this._area = opts.area;
+    document.querySelector(this._area).setAttribute('style','position: relative');
 
     var canvasId = 'imagezoomer-'+(new Date()).getTime();
 

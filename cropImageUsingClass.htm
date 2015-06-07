@@ -8,7 +8,7 @@
   <style>
       body {
         margin: 0px;
-        padding: 0px;
+        padding: 100px;
       }
   </style>
 </head>
@@ -17,17 +17,15 @@
 
 <h2>Example 1:</h2>
 
-<h2>Test Area:</h2>
-<div style="position: relative;width:50%;margin:0 auto" id="zoomingArea">
+<div id="zoomingArea">
   <canvas id="canvas"></canvas>
   <canvas id="img"></canvas>
 </div>
 
-
-<h2>Example 2:</h2>
-
-<h2>Test Area:</h2>
-<div style="position: relative;width:50%;margin:0 auto" id="zoomingArea2"></div>
+<div style="padding: 20px;position: absolute;top:500px;left:20%;border: 1px solid black">
+    <h2>Example 2: moved area</h2>
+    <div id="zoomingArea2"></div>
+</div>
 
 
 </body>
@@ -53,9 +51,9 @@
         dest: "#img2",
         cursorWidth: 5,
         cursorHeight: 5,
-        cropWidth: 300,
-        cropHeight: 300
-        //zoom: 500
+        cropWidth: 50,
+        cropHeight: 50,
+        zoom: 100
     });
 
 </script>
