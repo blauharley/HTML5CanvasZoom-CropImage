@@ -34,8 +34,7 @@ function ImageZoomer(opts){
     this._dest.setAttribute('style','position: absolute;display: none;pointer-events:none;'+this._destStyle);
     this._destCtx = this._dest.getContext('2d');
 
-    this._cropWidth = opts.cropWidth;
-    this._cropHeight = opts.cropHeight;
+    this._crop = opts.crop;
 
     this._cursorWidth = !isNaN(opts.cursorWidth) || 0;
     this._cursorHeight = !isNaN(opts.cursorHeight) || 0;
@@ -50,12 +49,23 @@ function ImageZoomer(opts){
     this._imgsource = new Image();
     this._imgsource.onload = function(){
 
-        this._dest.setAttribute('width',this._cropWidth);
-        this._dest.setAttribute('height',this._cropHeight);
+        this._dest.setAttribute('width',this._crop);
+        this._dest.setAttribute('height',this._crop);
 
-        this._imgWidth = this._imgsource.width;
-        this._imgHeight = this._imgsource.height;
+        this._orignalWidth = this._imgsource.width;
+        this._orignalHeight = this._imgsource.height;
 
+        this._ration = this._imgsource.height/this._orignalWidth;
+
+        this._adjWidth = opts.image.width;
+
+        this._imgWidth = this._adjWidth ? this._adjWidth : this._orignalWidth;
+        this._imgHeight = this._adjWidth ? this._imgWidth*this._ration : this._orignalHeight;
+
+        this._widthRation = this._orignalWidth/this._imgWidth;
+        this._heightRation = this._orignalHeight/this._imgHeight;
+
+        this._source.setAttribute('style','cursor:none;width:'+this._imgWidth+'px;height:'+(this._imgWidth*this._ration)+'px;');
         this._source.setAttribute('width',this._imgWidth);
         this._source.setAttribute('height',this._imgHeight);
 
@@ -100,13 +110,13 @@ function ImageZoomer(opts){
 
 
     }.bind(this);
-    this._imgsource.src = opts.image;
+    this._imgsource.src = opts.image.src;
 
 }
 
 ImageZoomer.prototype._hideCropImageCanvas = function(){
     this._isPressing = false;
-    this._source.setAttribute('style','cursor:default');
+    this._source.setAttribute('style','cursor:default;width:'+this._imgWidth+'px;height:'+(this._imgWidth*this._ration)+'px;');
     this._dest.setAttribute('style','display: none;');
 };
 
@@ -122,27 +132,47 @@ ImageZoomer.prototype._handleDrawingMag = function(){
 
     if(this._isPressing){
 
-        this._source.width = this._source.width;
         this._source.setAttribute('style','cursor:none');
+        this._source.setAttribute('style','cursor:none;width:'+this._imgWidth+'px;height:'+(this._imgWidth*this._ration)+'px;');
 
+        this._source.width = this._source.width;
         this._sourceCtx.drawImage(this._imgsource,0,0,this._imgWidth,this._imgHeight);
 
-        var rectX = this._currentPosX-(this._cropWidth/2)-this._cursorWidth;
+        var orgrectX = this._currentPosX-(this._crop/2)-this._cursorWidth;
         // take x-borders into consideration
-        rectX = rectX<0?0:rectX;
-        rectX = rectX+this._cropWidth>this._imgWidth?this._imgWidth-this._cropWidth:rectX;
+        var rectX = orgrectX+this._crop>this._imgWidth?this._imgWidth-this._crop:(orgrectX<0?0:orgrectX);
 
-        var rectY = this._currentPosY-(this._cropHeight/2)-this._cursorHeight;
+        var orgrectY = this._currentPosY-(this._crop/2)-this._cursorHeight;
         // take y-borders into consideration
-        rectY = rectY<0?0:rectY;
-        rectY = rectY+this._cropHeight>this._imgHeight?this._imgHeight-this._cropHeight:rectY;
+        var rectY = orgrectY+this._crop>this._imgHeight?this._imgHeight-this._crop:(orgrectY<0?0:orgrectY);
 
-        this._destCtx.drawImage(this._imgsource,rectX,rectY,this._cropWidth,this._cropHeight,0,0,this._cropWidth,this._cropHeight);
-        var ratio = this._cropWidth/this._cropHeight;
+        /* show crop rect
+        this._sourceCtx.beginPath();
+        this._sourceCtx.rect(rectX, rectY, this._crop, this._crop);
+        this._sourceCtx.fillStyle = 'rgba(0,0,125,0.2)';
+        this._sourceCtx.fill();
+        this._sourceCtx.lineWidth = 1;
+        this._sourceCtx.strokeStyle = 'black';
+        this._sourceCtx.stroke();
+        */
+        var cutX = (this._currentPosX*this._widthRation)-(this._crop/2);
+        var cutY = (this._currentPosY*this._heightRation)-(this._crop/2);
+        this._destCtx.drawImage(
+            this._imgsource,
+            (cutX+this._crop)>this._orignalWidth?(this._orignalWidth-this._crop):(cutX<0?0:cutX),
+            (cutY+this._crop)>this._orignalHeight?(this._orignalHeight-this._crop):(cutY<0?0:cutY),
+            this._crop,
+            this._crop,
+            0,
+            0,
+            this._crop,
+            this._crop
+        );
+        var ratio = this._crop/this._crop;
         this._dest.setAttribute('style','position: absolute;pointer-events:none;cursor:none;display: block;'+
-            'top:'+(rectY-(this._zoomFactor/2))+'px;'+'left:'+(rectX-((this._zoomFactor*ratio)/2))+'px;'+
-            'width:'+((this._cropWidth+(this._zoomFactor*ratio)))+'px;'+
-            'height:'+(this._cropHeight+this._zoomFactor)+'px;'+this._destStyle
+            'top:'+(orgrectY-(this._zoomFactor/2))+'px;'+'left:'+(orgrectX-((this._zoomFactor*ratio)/2))+'px;'+
+            'width:'+((this._crop+(this._zoomFactor*ratio)))+'px;'+
+            'height:'+(this._crop+this._zoomFactor)+'px;'+this._destStyle
         );
 
     }
