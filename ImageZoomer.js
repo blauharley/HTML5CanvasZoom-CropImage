@@ -80,6 +80,27 @@ function ImageZoomer(opts){
             this._hideCropImageCanvas();
         }.bind(this));
 
+        /* touch devices support */
+        if('ontouchstart' in document.documentElement){
+
+          this._source.addEventListener('touchstart',function(){
+            this._isPressing = true;
+            this._handleDrawingMag();
+          }.bind(this));
+
+          this._source.addEventListener('touchmove',function(e){
+
+            var mousePos = this._getMousePos(this._source, e);
+
+            this._currentPosX = mousePos.x;
+            this._currentPosY = mousePos.y;
+
+            this._handleDrawingMag();
+
+          }.bind(this));
+
+        }
+
         /* ie 9&10 quirks */
         if(navigator.appVersion.indexOf("MSIE 9.")!=-1||navigator.appVersion.indexOf("MSIE 10.")!=-1){
             this._dest.addEventListener('mouseup',function(){
