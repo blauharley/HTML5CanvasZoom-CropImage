@@ -153,7 +153,6 @@ ImageZoomer.prototype._handleDrawingMag = function(){
 
     if(this._isPressing){
 
-        this._source.setAttribute('style','cursor:none');
         this._source.setAttribute('style','cursor:none;width:'+this._imgWidth+'px;height:'+(this._imgWidth*this._ration)+'px;');
 
         this._source.width = this._source.width;
