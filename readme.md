@@ -1,7 +1,7 @@
 <h2>ImageZoomer</h2>
 <p>A JavaScript Class that is used to zoom into an image</p>
 
-<h3>Example 1:</h3>
+<h3>Examples</h3>
 <p>Define an area and HTML5 Canvas elements you want an image to appear:</p>
 
 ```html
@@ -23,7 +23,7 @@
 
 ```
 
-<p>Initalize an instance of type ImageZoomer. And you are done!</p>
+<p>Initalize an instance of type ImageZoomer by passing some preferences into ImageZoomer constructor. And you are done!</p>
 
 ```javascript
 
@@ -37,6 +37,20 @@ new ImageZoomer({
 	dest: "#magnifier",
 	crop: 60,
 	zoom: 100
+});
+
+```
+
+<p>Furthermore you can specify how the magnifier(HTML5 destination canvas) should look like. This can be done by passing a <i>destStyle</i> Object into ImageZoomer constructor.</p>
+
+```javascript
+
+new ImageZoomer({
+	...
+        destStyle: {
+            border:"1px solid black",
+            "border-radius":"100px"
+        }
 });
 
 ```
