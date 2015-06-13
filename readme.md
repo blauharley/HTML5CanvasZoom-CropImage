@@ -53,7 +53,7 @@ new ImageZoomer({
 	<ul>
          <li><b><i>image</i></b> must be an object that holds image source <i>url</i> and optional image <i>width</i>. If no image width is passed original image width is used.</b></li>
 	  <li><b><i>area</i></b> must be an ID or Class name that references to an HTML element into which an zoomable image should appear.</b></li>
-	  <li><i>crop</i> must be a Number that defines a cropping quadratic sizes in pixel. Default value is 1 pixels</b></li>
+	  <li><b><i>crop</i></b> must be a Number that defines a cropping quadratic sizes in pixel. Default value is 1 pixel.</b></li>
 	  <li><b><i>zoom</i></b> must be a Number that defines quadratic sizes of the magnifier in pixel. This value is used to show a magnifier effect on destination HTML5 canvas. Default value is 10 pixels.</b></li>
 	  <li><i>source</i> must be an ID or Class name that references to an HTML element into which an image should be shown.</b></li>
 	  <li><i>dest</i> must be an ID or Class name that references to an HTML element that is used to show magnifier.</b></li>
