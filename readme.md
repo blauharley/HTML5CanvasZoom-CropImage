@@ -41,6 +41,8 @@ new ImageZoomer({
 
 ```
 
+<p>But there are more possibilities of how you can use ImageZoomer within <i>cropImageUsingClass.html.</i></p>
+
 <h3>Constructor</h3>
 
 <blockquote>
@@ -49,11 +51,10 @@ new ImageZoomer({
   <p>
 	@param <b><i>opts</i></b> must be an Object to be given to adjust some Preferences:
 	<ul>
-         <li><b><i>image</i></b> must be an object that holds image source url and optional image width. If no image width is passed original image width is used.</b></li>
+         <li><b><i>image</i></b> must be an object that holds image source <i>url</i> and optional image <i>width</i>. If no image width is passed original image width is used.</b></li>
 	  <li><b><i>area</i></b> must be an ID or Class name that references to an HTML element into which an zoomable image should appear.</b></li>
-	  <li><b><i>source</i></b> must be an ID or Class name that references to an HTML element into which an zoomable image should be put.</b></li>
-          <li><b><i>crop</i></b> must be a Number that defines a cropping width/height in pixel</b></li>
-	  <li><b><i>zoom</i></b> must be a Number that defines width/height of the magnifier in pixel</b></li>
+	  <li><i>crop</i> must be a Number that defines a cropping quadratic sizes in pixel. Default value is 1 pixels</b></li>
+	  <li><b><i>zoom</i></b> must be a Number that defines quadratic sizes of the magnifier in pixel. This value is used to show a magnifier effect on destination HTML5 canvas. Default value is 10 pixels.</b></li>
 	  <li><i>source</i> must be an ID or Class name that references to an HTML element into which an image should be shown.</b></li>
 	  <li><i>dest</i> must be an ID or Class name that references to an HTML element that is used to show magnifier.</b></li>
 	  <li><i>destStyle</i> must be an Object that defines additionally style properties like <i>border-radius</i> that can be applied onto magnifier.</b></li>
@@ -63,6 +64,49 @@ new ImageZoomer({
   <p>@return this</p>
 	
 </blockquote>
+
+
+<h3>Public Methods</h3>
+
+<p>Setter and Getter for Cropping<p>
+<blockquote>
+
+  <p><b>ImageZoomer.prototype.setCrop( in crop:Number ) : instance</b></p>
+  <p>
+     @param <b><i>crop</i></b> must be Number that defines cropping quadratic sizes in pixels.
+  </p>
+
+  <p>@return this</p>
+	
+</blockquote>
+
+<blockquote>
+
+  <p><b>ImageZoomer.prototype.getCrop() : Number</b></p>
+  <p>@return Number</p>
+	
+</blockquote>
+
+
+<p>Setter and Getter for Zooming<p>
+<blockquote>
+
+  <p><b>ImageZoomer.prototype.setZoom( in zoom:Number ) : instance</b></p>
+  <p>
+     @param <b><i>zoom</i></b> must be Number that defines quadratic sizes of the magnifier in pixels.
+  </p>
+
+  <p>@return this</p>
+	
+</blockquote>
+
+<blockquote>
+
+  <p><b>ImageZoomer.prototype.getZoom() : Number</b></p>
+  <p>@return Number</p>
+	
+</blockquote>
+
 
 
 <h3>Supported Browsers:</h3>
