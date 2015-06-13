@@ -120,4 +120,4 @@ new ImageZoomer({
 </ul>
 
 <h3>License:</h3>
-GNU: Basically this software can be used and modified freely and without any restrictions.
+GNU: Basically this software can be used and modified freely and without any restrictions. This does NOT include any pictures that are used for test purposes in this project.
