@@ -47,6 +47,8 @@ function ImageZoomer(opts){
     this._currentPosX = 0;
     this._currentPosY = 0;
 
+    this._isTouchable = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
     this._imgsource = new Image();
     this._imgsource.onload = function(){
 
@@ -82,23 +84,36 @@ function ImageZoomer(opts){
         }.bind(this));
 
         /* touch devices support */
-        if('ontouchstart' in document.documentElement){
+        if(this._isTouchable){
 
-          this._source.addEventListener('touchstart',function(){
-            this._isPressing = true;
-            this._handleDrawingMag();
-          }.bind(this));
+            var instance = this;
 
-          this._source.addEventListener('touchmove',function(e){
+            this._source.addEventListener('touchstart',function(e){
 
-            var mousePos = this._getMousePos(this._source, e);
+                instance._isPressing = true;
+                var mousePos = instance._getMousePos(instance._source, {
+                    clientX : e.targetTouches && e.targetTouches[0] ? e.targetTouches[0].clientX : 0,
+                    clientY : e.targetTouches && e.targetTouches[0] ? e.targetTouches[0].clientY : 0
+                });
+                instance._currentPosX = mousePos.x;
+                instance._currentPosY = mousePos.y;
 
-            this._currentPosX = mousePos.x;
-            this._currentPosY = mousePos.y;
+                instance._handleDrawingMag();
 
-            this._handleDrawingMag();
+            },false);
 
-          }.bind(this));
+            this._source.addEventListener('touchmove',function(e){
+
+                var mousePos = instance._getMousePos(instance._source, {
+                    clientX : e.targetTouches && e.targetTouches[0] ? e.targetTouches[0].clientX : 0,
+                    clientY : e.targetTouches && e.targetTouches[0] ? e.targetTouches[0].clientY : 0
+                });
+                instance._currentPosX = mousePos.x;
+                instance._currentPosY = mousePos.y;
+
+                instance._handleDrawingMag();
+
+            },false);
 
         }
 
